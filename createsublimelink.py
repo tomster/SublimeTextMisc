@@ -50,7 +50,7 @@ if WINDOWS:
 
     for protocol_name in PROTOCOLS:
         try:
-            with OpenKey( HKEY_CLASSES_ROOT,
+            with OpenKey(HKEY_CLASSES_ROOT,
                          r'%s\shell\open\command' % protocol_name) as key:
                 val, _ = QueryValueEx(key, None)
 
@@ -74,7 +74,7 @@ if WINDOWS:
                 # Can't use string formatting:             {           %s  }
                 #                                          v           v
                 setvalue (
-                    (r'"$EXE" --command "open_protocol_url {\"url\": \"%1\"}"'
+                                    (r'"$EXE" --command "open_protocol_url {\"url\": \"%1\"}"'
                     .replace('$EXE', sys.executable)), r'shell\open\command')
 
                 print ('Added %r SublimeProtocol to windows'
@@ -92,10 +92,12 @@ if not WINDOWS:
 else:
     args_2_string = subprocess.list2cmdline
 
+
 class one_shot(object):
     def __init__(self):
         self.callbacks.append(self)
         self.remove = lambda: self.callbacks.remove(self)
+
 
 def on_load(f=None, window=None, encoded_row_col=True):
     window = window or sublime.active_window()

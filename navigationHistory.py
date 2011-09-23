@@ -1,8 +1,10 @@
-import sublime, sublime_plugin
+import sublime
+import sublime_plugin
 from collections import deque
 
 MAX_SIZE = 64
 LINE_THRESHOLD = 2
+
 
 class Location(object):
     """A location in the history
@@ -27,6 +29,7 @@ class Location(object):
 
     def copy(self):
         return Location(self.path, self.line, self.col)
+
 
 class History(object):
     """Keep track of the history for a single window
@@ -96,10 +99,10 @@ class History(object):
         
         self._back.append(self._current)
         self._current = self._forward.popleft()
-        self._last_movement = self._current # preempt, so we don't re-push
+        self._last_movement = self._current  # preempt, so we don't re-push
         return self._current
 
-_histories = {} # window id -> History
+_histories = {}  # window id -> History
 
 def get_history():
     """Get a History object for the current window,
@@ -146,6 +149,7 @@ class NavigationHistoryRecorder(sublime_plugin.EventListener):
     #     for window_id in closed_windows:
     #         del _histories[window_id]
 
+
 class NavigationHistoryBack(sublime_plugin.TextCommand):
     """Go back in history
     """
@@ -159,6 +163,7 @@ class NavigationHistoryBack(sublime_plugin.TextCommand):
         if location:
             window = sublime.active_window()
             window.open_file("%s:%d:%d" % (location.path, location.line, location.col), sublime.ENCODED_POSITION)
+
 
 class NavigationHistoryForward(sublime_plugin.TextCommand):
     """Go forward in history
